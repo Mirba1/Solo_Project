@@ -71,7 +71,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 class FavoriteView(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-
+    permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
         queryset = super().get_queryset()
