@@ -41,14 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'account',
+    'chat',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
     'films',
-    'oauth2_provider',
     'social_django',
-    'rest_framework_social_oauth2',
+    'channels'
+
 ]
 
 MIDDLEWARE = [
@@ -60,13 +61,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,8 +81,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
+ASGI_APPLICATION = 'main.asgi.application'
 
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
@@ -144,8 +153,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ],
 
 
@@ -155,13 +162,9 @@ REST_FRAMEWORK = {
 
 }
 
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.vk.VKOAuth2',
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
-SOCIAL_AUTH_VK_OAUTH2_KEY = '7939600'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'ZxN3QHgOwR6F53Uz0bLn '
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7945846'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = '0lA0FoBBdHPE9XrwQNvl'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -175,4 +178,11 @@ EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',          # бекенд авторизации через ВКонтакте
+    'django.contrib.auth.backends.ModelBackend', # бекенд классической аутентификации, чтобы работала авторизация через обычный логин и пароль
+)
+
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 

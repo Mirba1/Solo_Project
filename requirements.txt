@@ -5,6 +5,4 @@ Pillow
 django-filter
 python-decouple
 drf-yasg
-django-rest-framework-social-oauth2
-channels
-channels-redis
+selenium

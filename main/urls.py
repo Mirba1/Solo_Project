@@ -31,6 +31,7 @@ router.register('film', FilmViewSet)
 router.register('favorite', FavoriteView)
 router.register('comments', CommentViewSet)
 router.register('rating', RatingViewSet)
+router.register('like', LikeViewSet)
 
 
 
@@ -54,6 +55,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('account/', include('account.urls')),
     path('api/v1/', include(router.urls)),
-    path('auth/', include('rest_framework_social_oauth2.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('chat/', include('chat.urls')),
+    path('', include('social_django.urls')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

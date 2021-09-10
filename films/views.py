@@ -10,6 +10,7 @@ from django_filters import rest_framework as filters
 from django_filters import rest_framework as rest_filters
 
 
+
 class FilmFilter(filters.FilterSet):
     class Meta:
         model = Film
@@ -70,7 +71,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 class FavoriteView(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated, ]
+
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -79,3 +80,8 @@ class FavoriteView(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
+
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
