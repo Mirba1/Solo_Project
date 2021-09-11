@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from .serializer import *
 from .models import *
 from django_filters import rest_framework as filters
-
+from .permissions import *
 from django_filters import rest_framework as rest_filters
 
 
@@ -39,7 +39,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy', 'like']:
-            return [IsAdminUser()]
+            return [IsAuthorOrIsAdmin()]
         elif self.action in ['like']:
             return [IsAuthenticated()]
         return []
@@ -62,7 +62,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthorOrIsAdmin]
 
 
 
@@ -71,7 +71,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 class FavoriteView(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthorOrIsAdmin, IsAuthenticated]
 
     def get_queryset(self):
         queryset = super().get_queryset()

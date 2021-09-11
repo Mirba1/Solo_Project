@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 from django.contrib.staticfiles.urls import static
@@ -53,9 +53,10 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
-    path('account/', include('account.urls')),
     path('api/v1/', include(router.urls)),
     path('chat/', include('chat.urls')),
-    path('', include('social_django.urls')),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('auth/', include('rest_framework_social_oauth2.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

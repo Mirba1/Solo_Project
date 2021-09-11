@@ -4,6 +4,7 @@ from django.db import models
 
 User = get_user_model()
 
+
 def validate_rating(rating):
     if rating < 0:
         raise ValidationError(('Рейтинг не может быть ниже 0'),params={'rating': rating},)
@@ -38,33 +39,25 @@ class Comment(models.Model):
     film = models.ForeignKey(Film,
                                 on_delete=models.CASCADE,
                                 related_name='comment')
-    author = models.ForeignKey(User,
-                               on_delete=models.CASCADE,
-                               related_name='user')
+    user = models.CharField(max_length=50)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    user = models.CharField(max_length=50)
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='favorites')
     favorite = models.BooleanField(default=False)
 
 
-
-
-
-
 class Rating(models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='rating_manga')
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE,
-                             related_name='author')
+    user = models.CharField(max_length=50)
     rating = models.SmallIntegerField(default=0, validators=[validate_rating])
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    user = models.CharField(max_length=50)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     is_liked = models.BooleanField(default=False)

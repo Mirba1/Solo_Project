@@ -6,3 +6,6 @@ django-filter
 python-decouple
 drf-yasg
 selenium
+djoser
+django-rest-framework-social-oauth2
+
